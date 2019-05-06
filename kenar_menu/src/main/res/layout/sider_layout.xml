@@ -1,0 +1,199 @@
+<android.support.constraint.ConstraintLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nvLeft"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="end"
+    android:clipToPadding="false"
+    android:overScrollMode="never"
+    android:scrollbars="none">
+
+    <android.support.constraint.Guideline
+        android:id="@+id/StartingBoundary"
+        app:layout_constraintGuide_percent="0.2"
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/endingBoundary"
+        app:layout_constraintGuide_end="0dp"
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <View
+        android:visibility="gone"
+        android:id="@+id/edgeTouchView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="20dp"
+        android:background="@color/black"
+        android:layout_height="match_parent"/>
+
+    <View
+        android:id="@+id/toggleDrawer"
+        android:layout_width="50dp"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toStartOf="@+id/drawerContent"
+        app:layout_constraintEnd_toStartOf="@+id/drawerContent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </View>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/drawerContent"
+        android:layout_width="0dp"
+        android:background="@color/white"
+        android:layout_height="match_parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/endingBoundary">
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/reserve_window_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:text="End menu"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <View
+                android:id="@+id/divider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:alpha="0.5"
+                android:background="@color/white"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/title" />
+
+            <ir.drax.loadingbutton.NormalButton
+                android:id="@+id/refreshBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:maxHeight="52dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toRightOf="@id/just_mine_switch"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/divider"
+                app:src="@drawable/ic_refresh_black_24dp"
+                app:text="Refresh"
+                app:text_color="@color/white" />
+
+            <android.support.v7.widget.SwitchCompat
+                android:id="@+id/just_mine_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Filter"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/divider" />
+
+
+        </android.support.constraint.ConstraintLayout>
+
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_container"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/reserve_window_title">
+
+            <RelativeLayout
+                android:id="@+id/swipe_inner_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/empty_list_message"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="150dp"
+                    android:backgroundTint="@color/gray_50"
+                    android:drawableBottom="@drawable/ic_arrow_downward_black_24dp"
+                    android:gravity="center"
+                    android:text="No reserve rides yet!\n To refresh the list please PULL DOWN" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/list"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/transparent"
+                    android:scrollbars="vertical"
+                    tools:listitem="@layout/sider_reserve_item" />
+            </RelativeLayout>
+
+        </android.support.v4.widget.SwipeRefreshLayout>
+
+    </android.support.constraint.ConstraintLayout>
+
+    <ScrollView
+        android:id="@+id/innerRoomContainer"
+        android:background="@color/white"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_height="match_parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/drawerContent"
+        android:layout_width="0dp"
+        />
+
+    <LinearLayout
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/drawerContent"
+        android:id="@+id/loading"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="gone"
+        android:alpha="0"
+        android:background="@color/white"
+        android:gravity="center_horizontal"
+        android:layout_width="0dp"
+        android:layout_height="0dp">
+
+        <android.support.v4.widget.ContentLoadingProgressBar
+            android:id="@+id/innerRoomProgressbar"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="250dp"
+            android:indeterminate="true"
+            style="?android:attr/progressBarStyleSmall"
+            android:indeterminateTintMode="src_atop"
+            />
+
+    </LinearLayout>
+    <ImageView
+        android:id="@+id/faded_back_btn"
+        android:alpha="0"
+        android:scaleType="center"
+        app:layout_constraintEnd_toStartOf="@id/drawerContent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:background="@color/black"
+        android:foreground="?android:selectableItemBackground"
+        app:srcCompat="@drawable/ic_arrow_back_black_24dp"
+        android:layout_width="0dp"
+        android:layout_height="match_parent" />
+
+</android.support.constraint.ConstraintLayout>
