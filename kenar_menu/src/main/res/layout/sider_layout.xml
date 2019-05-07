@@ -93,7 +93,7 @@
                 app:layout_constraintLeft_toRightOf="@id/just_mine_switch"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/divider"
-                app:src="@drawable/ic_refresh_black_24dp"
+                app:src="@drawable/ic_refresh"
                 app:text="Refresh"
                 app:text_color="@color/white" />
 
@@ -131,9 +131,16 @@
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="150dp"
                     android:backgroundTint="@color/gray_50"
-                    android:drawableBottom="@drawable/ic_arrow_downward_black_24dp"
                     android:gravity="center"
-                    android:text="No reserve rides yet!\n To refresh the list please PULL DOWN" />
+                    android:text="No items yet!\n To refresh the list please PULL DOWN" />
+
+                <ImageView
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="200dp"
+                    app:srcCompat="@drawable/ic_arrow_downward_black_24dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/list"

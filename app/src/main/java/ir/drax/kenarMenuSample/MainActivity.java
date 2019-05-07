@@ -7,6 +7,8 @@ import android.view.Gravity;
 import android.view.View;
 
 import ir.drax.kenar_menu.SliderPlus;
+import ir.drax.kenar_menu.interfaces.SliderPlusInteraction;
+import ir.drax.kenar_menu.models.ReserveItem;
 
 public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
@@ -21,16 +23,31 @@ public class MainActivity extends AppCompatActivity {
         sliderPlus = findViewById(R.id.SlideMenu);
 
 
-        sliderPlus.open();
+        sliderPlus.setPlusInteractions(new SliderPlusInteraction() {
+            @Override
+            public void onRequestListByPage(int pageNo) {
+
+            }
+
+            @Override
+            public boolean onListItemClicked(ReserveItem reserveItem, int position) {
+                return false;
+            }
+
+            @Override
+            public View listItemLayout(ReserveItem item, int position, View listItemLayout) {
+                return null;
+            }
+        });
     }
 
 
     public void openStartDrawer(View view) {
-        drawerLayout.openDrawer(Gravity.RIGHT);
+        drawerLayout.openDrawer(Gravity.START);
 
     }
 
     public void openEndDrawer(View view) {
-
+        sliderPlus.open();
     }
 }

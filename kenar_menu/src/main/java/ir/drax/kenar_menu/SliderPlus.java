@@ -4,9 +4,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.support.constraint.ConstraintLayout;
 import android.support.constraint.ConstraintSet;
+import android.support.design.widget.Snackbar;
 import android.support.graphics.drawable.AnimatedVectorDrawableCompat;
 import android.support.transition.TransitionManager;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
@@ -19,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,6 +70,7 @@ public class SliderPlus extends FrameLayout implements SwipeRefreshLayout.OnRefr
     }
 
     private void init() {
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
         LayoutInflater inflater = (LayoutInflater) getContext()
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.sider_layout, this, true);
@@ -451,5 +455,18 @@ public class SliderPlus extends FrameLayout implements SwipeRefreshLayout.OnRefr
 
     public ArrayList<ReserveItem> getHiddenItems(){
         return listAdapter.getHiddenItems();
+    }
+
+    public void showSnackMessage(boolean success , String message){
+        Snackbar snackbar = Snackbar.make(this,message,Snackbar.LENGTH_SHORT);
+
+        TextView mesage = snackbar.getView().findViewById(android.support.design.R.id.snackbar_text);
+
+        if (success)
+            mesage.setTextColor(getResources().getColor(R.color.white));
+        else
+            mesage.setTextColor(getResources().getColor(R.color.red_color));
+
+        snackbar.show();
     }
 }
