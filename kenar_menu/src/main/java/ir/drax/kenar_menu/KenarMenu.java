@@ -7,6 +7,7 @@ import android.support.constraint.ConstraintSet;
 import android.support.design.widget.Snackbar;
 import android.support.graphics.drawable.AnimatedVectorDrawableCompat;
 import android.support.transition.TransitionManager;
+import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.LinearLayoutManager;
@@ -28,11 +29,10 @@ import java.util.List;
 
 import ir.drax.kenar_menu.interfaces.Drag;
 import ir.drax.kenar_menu.interfaces.SliderPlusInteraction;
-import ir.drax.kenar_menu.models.ReserveItem;
 import ir.drax.loadingbutton.ClickListener;
 import ir.drax.loadingbutton.NormalButton;
 
-public class SliderPlus extends FrameLayout implements SwipeRefreshLayout.OnRefreshListener, Drag {
+public class KenarMenu extends FrameLayout implements SwipeRefreshLayout.OnRefreshListener, Drag {
     private String TAG = getClass().getSimpleName();
     private int DRAWER_STATE_CLOSED = 0;
     private int DRAWER_STATE_OPEN = 1;
@@ -54,17 +54,17 @@ public class SliderPlus extends FrameLayout implements SwipeRefreshLayout.OnRefr
     private View innerRoomLayout;
     private SliderPlusInteraction plusInteractions;
 
-    public SliderPlus(Context context) {
+    public KenarMenu(Context context) {
         super(context);
         init();
     }
 
-    public SliderPlus(Context context, AttributeSet attrs) {
+    public KenarMenu(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
-    public SliderPlus(Context context, AttributeSet attrs, int defStyleAttr) {
+    public KenarMenu(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
     }
@@ -120,14 +120,17 @@ public class SliderPlus extends FrameLayout implements SwipeRefreshLayout.OnRefr
         new DragHelper().setListener(new Drag() {
             @Override
             public void onSwipe(float position) {
-                Log.e(TAG,position +"-");
+                Log.e(TAG,position +"="+ (ViewCompat.getLayoutDirection(KenarMenu.this) == ViewCompat.LAYOUT_DIRECTION_RTL?1:-1)
+                        * position + findViewById(R.id.toggleDrawer).getWidth());
 
                 ConstraintLayout container = findViewById(R.id.nvLeft);
 
                 ConstraintSet set = new ConstraintSet();
                 set.clone(container);
 
-                set.setGuidelineEnd(R.id.endingBoundary, (int) (-position + findViewById(R.id.toggleDrawer).getWidth()));
+                set.setGuidelineEnd(R.id.endingBoundary, screenWidth + 100 - (int) (
+                                (ViewCompat.getLayoutDirection(KenarMenu.this) == ViewCompat.LAYOUT_DIRECTION_RTL?1:-1)
+                        * position + findViewById(R.id.toggleDrawer).getWidth()));
 
 
                 set.applyTo(container);
@@ -149,19 +152,9 @@ public class SliderPlus extends FrameLayout implements SwipeRefreshLayout.OnRefr
 
             @Override
             public void onClick() {
-                drawerState = DRAWER_STATE_CLOSED;
-                openDrawer();
+
             }
         }, findViewById(R.id.toggleDrawer));
-
-        /*findViewById(R.id.edgeTouchView).setOnLongClickListener(new OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                Log.e(TAG,"onLongClick");
-                onSwipeOut(40);
-                return false;
-            }
-        });*/
     }
 
 
@@ -395,7 +388,11 @@ public class SliderPlus extends FrameLayout implements SwipeRefreshLayout.OnRefr
         ConstraintSet set = new ConstraintSet();
         set.clone(container);
 
-        set.setGuidelineBegin(R.id.StartingBoundary, (int) (position + (screenWidth * drawerDoorSize)));
+        //set.setGuidelineBegin(R.id.StartingBoundary, (int) (position + (screenWidth * drawerDoorSize)));
+
+        set.setGuidelineBegin(R.id.StartingBoundary, (int) (
+                (ViewCompat.getLayoutDirection(this) == ViewCompat.LAYOUT_DIRECTION_RTL?1:-1)
+                        * position + (screenWidth * drawerDoorSize)));
 
 
         set.applyTo(container);
@@ -423,12 +420,12 @@ public class SliderPlus extends FrameLayout implements SwipeRefreshLayout.OnRefr
         }
     }
 
-    public SliderPlus setPlusInteractions(SliderPlusInteraction plusInteractions) {
+    public KenarMenu setPlusInteractions(SliderPlusInteraction plusInteractions) {
         this.plusInteractions = plusInteractions;
         return this;
     }
 
-    public SliderPlus setInnerRoomLayout(View innerRoomLayout) {
+    public KenarMenu setInnerRoomLayout(View innerRoomLayout) {
         if (this.innerRoomLayout !=null)
             ((ViewGroup)findViewById(R.id.innerRoomContainer)).removeView(this.innerRoomLayout );
 
@@ -439,7 +436,7 @@ public class SliderPlus extends FrameLayout implements SwipeRefreshLayout.OnRefr
     }
 
 
-    public SliderPlus setListItemLayoutId(int listItemId) {
+    public KenarMenu setListItemLayoutId(int listItemId) {
         this.listItemId = listItemId;
         buildAdapter();
         return this;
@@ -450,7 +447,10 @@ public class SliderPlus extends FrameLayout implements SwipeRefreshLayout.OnRefr
     }
 
     public void close() {
-        closeDrawer();
+        if (drawerState==DRAWER_STATE_FOCUSED)
+            openDrawer();
+        else
+            closeDrawer();
     }
 
     public ArrayList<ReserveItem> getHiddenItems(){
@@ -468,5 +468,9 @@ public class SliderPlus extends FrameLayout implements SwipeRefreshLayout.OnRefr
             mesage.setTextColor(getResources().getColor(R.color.red_color));
 
         snackbar.show();
+    }
+
+    public boolean isOpen(){
+        return drawerState != DRAWER_STATE_CLOSED;
     }
 }

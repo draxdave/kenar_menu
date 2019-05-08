@@ -199,6 +199,7 @@
         app:layout_constraintStart_toStartOf="parent"
         android:background="@color/black"
         android:foreground="?android:selectableItemBackground"
+        android:tint="@color/white"
         app:srcCompat="@drawable/ic_arrow_back_black_24dp"
         android:layout_width="0dp"
         android:layout_height="match_parent" />

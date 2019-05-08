@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 
 import ir.drax.kenar_menu.interfaces.RecyclerInteraction;
-import ir.drax.kenar_menu.models.ReserveItem;
 
 public class ListAdapter extends RecyclerView.Adapter<ListAdapter.MyViewHolder> {
     private ArrayList<ReserveItem> items = new ArrayList<>();

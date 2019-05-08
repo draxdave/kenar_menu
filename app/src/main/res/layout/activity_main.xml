@@ -46,7 +46,7 @@
         app:menu="@menu/menu" />
 
 
-    <ir.drax.kenar_menu.SliderPlus
+    <ir.drax.kenar_menu.KenarMenu
         android:id="@+id/SlideMenu"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
