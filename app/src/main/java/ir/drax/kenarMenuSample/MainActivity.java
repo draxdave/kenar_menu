@@ -13,7 +13,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import ir.drax.kenar_menu.KenarMenu;
-import ir.drax.kenar_menu.ReserveItem;
 import ir.drax.kenar_menu.interfaces.SliderPlusInteraction;
 
 public class MainActivity extends AppCompatActivity {
@@ -50,7 +49,8 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public boolean onListItemClicked(final ReserveItem item, final int position) {
+            public boolean onListItemClicked( Object obj, final int position) {
+                final SampleObject item = (SampleObject) obj;
                 switch (position){
                     case 0:
                         return false;// This item will not go to DETAILS page
@@ -60,18 +60,17 @@ public class MainActivity extends AppCompatActivity {
                         return false;// This item will not go to DETAILS page too
 
                 }
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        setInnerLayoutData(item, position);
-                        kenarMenu.showRoomProgress(false);
-                    }
-                },500);
+
+                setInnerLayoutData(item);
+                kenarMenu.roomDataLoaded();
+
                 return true;
             }
 
             @Override
-            public View listItemLayout(ReserveItem item, int position, View listItemLayout) {
+            public View listItemLayout(Object obj, int position, View listItemLayout) {
+                final SampleObject item = (SampleObject) obj;
+
                 TextView title =listItemLayout.findViewById(R.id.title);
                 ImageView icon =listItemLayout.findViewById(R.id.icon);
                 title.setText(item.getTitle());
@@ -82,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void setInnerLayoutData(ReserveItem item, int position){
+    private void setInnerLayoutData(SampleObject item){
         TextView title= innerLayout.findViewById(R.id.title);
         TextView desc= innerLayout.findViewById(R.id.desc);
         ImageView icon= innerLayout.findViewById(R.id.icon);

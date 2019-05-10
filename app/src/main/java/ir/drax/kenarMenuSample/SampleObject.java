@@ -1,12 +1,12 @@
-package ir.drax.kenar_menu;
+package ir.drax.kenarMenuSample;
 
-public class ReserveItem {
+public class SampleObject {
     private int id;
     private int icon;
     private String title;
     private String desc;
 
-    public ReserveItem(int id, int icon, String title, String desc) {
+    public SampleObject(int id, int icon, String title, String desc) {
         this.id = id;
         this.icon = icon;
         this.title = title;

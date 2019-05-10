@@ -11,6 +11,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/ic_beach_access_black_24dp"
         android:layout_margin="@dimen/fab_margin"
+        android:tint="@color/black"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 

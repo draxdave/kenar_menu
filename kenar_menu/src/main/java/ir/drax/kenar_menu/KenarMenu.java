@@ -32,27 +32,24 @@ import ir.drax.kenar_menu.interfaces.SliderPlusInteraction;
 import ir.drax.loadingbutton.ClickListener;
 import ir.drax.loadingbutton.NormalButton;
 
-public class KenarMenu extends FrameLayout implements SwipeRefreshLayout.OnRefreshListener, Drag {
+public class KenarMenu<T> extends FrameLayout implements SwipeRefreshLayout.OnRefreshListener, Drag {
     private String TAG = getClass().getSimpleName();
-    private int DRAWER_STATE_CLOSED = 0;
-    private int DRAWER_STATE_OPEN = 1;
-    private int DRAWER_STATE_FOCUSED = 2;
+    private int DRAWER_STATE_CLOSED = 0, DRAWER_STATE_OPEN = 1, DRAWER_STATE_FOCUSED = 2, screenWidth, listItemId;
+    private int drawerState = DRAWER_STATE_CLOSED;
     private RecyclerView listView;
     private NormalButton refreshButton ;
-    private SwitchCompat just_mine_switch;
+    private SwitchCompat filter_switch;
     private SwipeRefreshLayout refreshLayout;
     private ListAdapter listAdapter;
-    private ArrayList<ReserveItem> items = new ArrayList<>();
-    private float LOADING_ALPHA = 0.5f;
-    private int drawerState = DRAWER_STATE_CLOSED;
+    private ArrayList<Object> items = new ArrayList<>();
+    private float LOADING_ALPHA = 0.5f,drawerDoorSize = 0.2f;
     private AnimatedVectorDrawableCompat animatedVectorDrawableCompat;
 
     private LinearLayout progressBar;
-    private int screenWidth,listItemId;
-    private float drawerDoorSize = 0.2f;
     private DragHelper dragHelper=new DragHelper();
     private View innerRoomLayout;
     private SliderPlusInteraction plusInteractions;
+    private boolean roomDataLoaded=false;
 
     public KenarMenu(Context context) {
         super(context);
@@ -159,8 +156,8 @@ public class KenarMenu extends FrameLayout implements SwipeRefreshLayout.OnRefre
 
 
     private void initFilter() {
-        just_mine_switch = findViewById(R.id.just_mine_switch);
-        just_mine_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        filter_switch = findViewById(R.id.just_mine_switch);
+        filter_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 onRefresh();
@@ -168,16 +165,18 @@ public class KenarMenu extends FrameLayout implements SwipeRefreshLayout.OnRefre
         });
     }
 
-    public void fillListByPage(List<ReserveItem> newItems , int page){
+    public KenarMenu fillListByPage(List<Object> newItems , int page){
         refreshListDone();
         if (page==1) items.clear();
 
         items.addAll(newItems);
         if (listAdapter != null)listAdapter.updateList();
+
+        return this;
     }
 
     public void showRoomProgress(boolean show){
-        if (show) {
+        if (show && !roomDataLoaded) {
             progressBar.setAlpha(0);
             progressBar.setVisibility(VISIBLE);
             progressBar.animate()
@@ -235,7 +234,7 @@ public class KenarMenu extends FrameLayout implements SwipeRefreshLayout.OnRefre
             }
 
             @Override
-            public View onItemLayoutLoaded(ReserveItem item, int position, int listItemLayout) {
+            public View onItemLayoutLoaded(Object item, int position, int listItemLayout) {
                 if (plusInteractions!=null) {
                     return plusInteractions.listItemLayout(item,position,LayoutInflater.from(getContext())
                             .inflate( listItemId, null, false));
@@ -244,7 +243,7 @@ public class KenarMenu extends FrameLayout implements SwipeRefreshLayout.OnRefre
             }
 
             @Override
-            public void onItemLayoutLoaded(ReserveItem reserveItem, int pos) {
+            public void onItemLayoutLoaded(Object reserveItem, int pos) {
                 if (plusInteractions!=null) {
                     if (plusInteractions.onListItemClicked(reserveItem,pos)){
                         moveToEndDrawer();
@@ -308,7 +307,7 @@ public class KenarMenu extends FrameLayout implements SwipeRefreshLayout.OnRefre
         //set.setVisibility(R.id.faded_back_btn, ConstraintSet.VISIBLE);
         set.applyTo(container);
 
-        onRefresh();
+        if (listAdapter.getItemCount()==0)onRefresh();
 
         dragHelper.setListener(this,this);
         drawerState = DRAWER_STATE_OPEN;
@@ -431,10 +430,8 @@ public class KenarMenu extends FrameLayout implements SwipeRefreshLayout.OnRefre
 
         this.innerRoomLayout = innerRoomLayout;
         ((ViewGroup)findViewById(R.id.innerRoomContainer)).addView(this.innerRoomLayout );
-
         return this;
     }
-
 
     public KenarMenu setListItemLayoutId(int listItemId) {
         this.listItemId = listItemId;
@@ -449,11 +446,12 @@ public class KenarMenu extends FrameLayout implements SwipeRefreshLayout.OnRefre
     public void close() {
         if (drawerState==DRAWER_STATE_FOCUSED)
             openDrawer();
+
         else
             closeDrawer();
     }
 
-    public ArrayList<ReserveItem> getHiddenItems(){
+    public ArrayList<Object> getHiddenItems(){
         return listAdapter.getHiddenItems();
     }
 
@@ -473,4 +471,12 @@ public class KenarMenu extends FrameLayout implements SwipeRefreshLayout.OnRefre
     public boolean isOpen(){
         return drawerState != DRAWER_STATE_CLOSED;
     }
+
+    public void roomDataLoaded(){
+        if (progressBar.getVisibility()==VISIBLE)
+            showRoomProgress(false);
+
+        roomDataLoaded=true;
+    }
+
 }

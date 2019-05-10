@@ -3,8 +3,6 @@ package ir.drax.kenarMenuSample;
 import java.util.ArrayList;
 import java.util.List;
 
-import ir.drax.kenar_menu.ReserveItem;
-
 public class FakeGenerator  {
 
     private static String[] titles = {"Curabitur eget augue consectetur", "Efficitur elit facilisis","Sagittis risus","Aliquam rhoncus massa","At lacus pretium","Quis semper ex pellentesque"};
@@ -21,10 +19,10 @@ public class FakeGenerator  {
     };
 
 
-    public static List<ReserveItem> getFakeItems(int count){
-        List<ReserveItem> list = new ArrayList<>();
+    public static List<SampleObject> getFakeItems(int count){
+        List<SampleObject> list = new ArrayList<>();
         for (int i = 0 ; count > i   ; i++){
-            list.add(new ReserveItem(i,icons[(int) (Math.random() * icons.length)],titles[(int) (Math.random() * titles.length)] ,descs[(int) (Math.random() * descs.length)]  ));
+            list.add(new SampleObject(i,icons[(int) (Math.random() * icons.length)],titles[(int) (Math.random() * titles.length)] ,descs[(int) (Math.random() * descs.length)]  ));
         }
 
         return list;

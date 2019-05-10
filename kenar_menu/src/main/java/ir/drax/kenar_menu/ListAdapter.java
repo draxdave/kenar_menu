@@ -1,5 +1,6 @@
 package ir.drax.kenar_menu;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,8 +12,8 @@ import java.util.ArrayList;
 import ir.drax.kenar_menu.interfaces.RecyclerInteraction;
 
 public class ListAdapter extends RecyclerView.Adapter<ListAdapter.MyViewHolder> {
-    private ArrayList<ReserveItem> items = new ArrayList<>();
-    private ArrayList<ReserveItem> hiddenItems=new ArrayList<>();
+    private ArrayList<Object> items = new ArrayList<>();
+    private ArrayList<Object> hiddenItems=new ArrayList<>();
     private RecyclerStates recyclerStates;
     private boolean interactionsEnabled = true;
     private int listItemLayout;
@@ -54,7 +55,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.MyViewHolder> 
         }
     }
 
-    public ListAdapter(ArrayList<ReserveItem> reserveItems, int listItem, RecyclerStates recyclerStates) {
+    ListAdapter(ArrayList<Object> reserveItems, int listItem, RecyclerStates recyclerStates) {
         items = reserveItems;
         this.recyclerStates = recyclerStates;
         this.listItemLayout =listItem;
@@ -71,29 +72,30 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.MyViewHolder> 
     }
 
 
+    @NonNull
     @Override
-    public ListAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent,
+    public ListAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent,
                                                        int viewType) {
         return new MyViewHolder(LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.sider_reserve_item, parent, false));
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
-        ReserveItem item = items.get(position);
+    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+        Object item = items.get(position);
         holder.revealLayout.close(false);
-        holder.revealLayout.setTag(item.getId());
+        holder.revealLayout.setTag(item.hashCode());
         holder.root.removeAllViews();
         holder.root.addView(
                 recyclerStates.onItemLayoutLoaded(item,position, listItemLayout)
         );
     }
 
-    public void disableInteractions(){
+    void disableInteractions(){
         interactionsEnabled = false;
     }
 
-    public void enableInteractions(){
+    void enableInteractions(){
         interactionsEnabled = true;
     }
 
@@ -103,11 +105,11 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.MyViewHolder> 
         return items.size();
     }
 
-    public ArrayList<ReserveItem> getHiddenItems() {
+    ArrayList<Object> getHiddenItems() {
         return hiddenItems;
     }
 
-    public void updateList() {
+    void updateList() {
         notifyDataSetChanged();
         checkState();
     }
@@ -115,8 +117,8 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.MyViewHolder> 
     public interface RecyclerStates {
         void onListEmpty();
         void onListNotEmpty();
-        View onItemLayoutLoaded(ReserveItem item, int position, int listItemLayou);
-        void onItemLayoutLoaded(ReserveItem reserveItem, int position);
+        View onItemLayoutLoaded(Object item, int position, int listItemLayou);
+        void onItemLayoutLoaded(Object reserveItem, int position);
     }
 
     public int getListItemLayoutId() {
