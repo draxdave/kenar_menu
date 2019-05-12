@@ -385,6 +385,8 @@ public class KenarMenu<T> extends FrameLayout implements SwipeRefreshLayout.OnRe
                 R.id.StartingBoundary, ConstraintSet.START);
         set.applyTo(container);
 
+        findViewById(R.id.innerRoomContainer).scrollTo(0,0);
+
         drawerState = DRAWER_STATE_FOCUSED;
     }
 
