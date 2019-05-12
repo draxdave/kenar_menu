@@ -95,12 +95,12 @@ public class KenarMenu<T> extends FrameLayout implements SwipeRefreshLayout.OnRe
             public void onLayoutChange( View v, int left, int top, int right, int bottom,
                                         int leftWas, int topWas, int rightWas, int bottomWas )
             {
-                int widthWas = rightWas - leftWas; // right exclusive, left inclusive
+                /*int widthWas = rightWas - leftWas; // right exclusive, left inclusive
                 if( v.getWidth() != widthWas )
                 {
                     float alpha =  (((float)v.getWidth()) / screenWidth);
                     //float rotation =  180 - ((((float)v.getWidth()) / (screenWidth*(1-drawerDoorSize)) ) * 180);
-                    //Log.e(TAG,rotation +"-");
+                    Log.e(TAG,alpha +"-");
                     v.setAlpha(1 - alpha);
                     //toggleIV.setRotation(rotation);
                     // width has changed
@@ -109,11 +109,11 @@ public class KenarMenu<T> extends FrameLayout implements SwipeRefreshLayout.OnRe
                 if( v.getHeight() != heightWas )
                 {
                     // height has changed
-                }
+                }*/
             }
         });
 
-        dragHelper.setListener2(this, findViewById(R.id.faded_back_btn));
+
         new DragHelper().setListener(new Drag() {
             @Override
             public void onSwipe(float position) {
@@ -125,11 +125,10 @@ public class KenarMenu<T> extends FrameLayout implements SwipeRefreshLayout.OnRe
                 set.clone(container);
 
                 int end = 0;
-                //end = end + findViewById(R.id.toggleDrawer).getWidth();
                 end = (int) (end + position);
 
                 if (ViewCompat.getLayoutDirection(KenarMenu.this) == ViewCompat.LAYOUT_DIRECTION_RTL) {
-                    end -= 100;
+                    end -= findViewById(R.id.toggleDrawer).getWidth();
                     end *= -1;
 
                 }else{
@@ -142,6 +141,10 @@ public class KenarMenu<T> extends FrameLayout implements SwipeRefreshLayout.OnRe
 
 
                 set.applyTo(container);
+
+                float alpha =  (((float)findViewById(R.id.faded_back_btn)
+                        .getWidth()) / screenWidth);
+                findViewById(R.id.faded_back_btn).setAlpha(1-alpha);
             }
 
             @Override
@@ -318,9 +321,12 @@ public class KenarMenu<T> extends FrameLayout implements SwipeRefreshLayout.OnRe
         //set.setVisibility(R.id.faded_back_btn, ConstraintSet.VISIBLE);
         set.applyTo(container);
 
+        findViewById(R.id.faded_back_btn).setAlpha(1- drawerDoorSize);
+
         if (listAdapter.getItemCount()==0)onRefresh();
 
         dragHelper.setListener(this,this);
+        dragHelper.setListener2(this, findViewById(R.id.faded_back_btn));
         drawerState = DRAWER_STATE_OPEN;
     }
 
@@ -345,10 +351,16 @@ public class KenarMenu<T> extends FrameLayout implements SwipeRefreshLayout.OnRe
 
         //set.setVisibility(R.id.faded_back_btn, ConstraintSet.GONE);
 
+        findViewById(R.id.faded_back_btn)
+                .animate()
+                .alpha(0)
+                .setDuration(500)
+                .start();
+
         set.applyTo(container);
 
         dragHelper.disable(this);
-
+        dragHelper.disable(findViewById(R.id.faded_back_btn));
         drawerState = DRAWER_STATE_CLOSED;
 
     }
@@ -407,6 +419,10 @@ public class KenarMenu<T> extends FrameLayout implements SwipeRefreshLayout.OnRe
 
         set.applyTo(container);
 
+
+        float alpha =  (((float)findViewById(R.id.faded_back_btn)
+                .getWidth()) / screenWidth);
+        findViewById(R.id.faded_back_btn).setAlpha(1-alpha);
     }
 
     @Override
