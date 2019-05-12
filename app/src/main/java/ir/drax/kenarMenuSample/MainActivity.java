@@ -1,6 +1,7 @@
 package ir.drax.kenarMenuSample;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.widget.DrawerLayout;
@@ -11,6 +12,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.Locale;
 
 import ir.drax.kenar_menu.KenarMenu;
 import ir.drax.kenar_menu.interfaces.SliderPlusInteraction;
@@ -23,6 +26,21 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        /*
+          Changing layout direction and locale to try rtl and ltr layouts
+         */
+
+
+       /* String languageToLoad  = "fa"; // your language
+        Locale locale = new Locale(languageToLoad);
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.locale = locale;
+        getBaseContext().getResources().updateConfiguration(config,
+                getBaseContext().getResources().getDisplayMetrics());*/
+
+
         setContentView(R.layout.activity_main);
 
         drawerLayout = findViewById(R.id.dl);

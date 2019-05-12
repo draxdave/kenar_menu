@@ -117,17 +117,28 @@ public class KenarMenu<T> extends FrameLayout implements SwipeRefreshLayout.OnRe
         new DragHelper().setListener(new Drag() {
             @Override
             public void onSwipe(float position) {
-                Log.e(TAG,position +"="+ (ViewCompat.getLayoutDirection(KenarMenu.this) == ViewCompat.LAYOUT_DIRECTION_RTL?1:-1)
-                        * position + findViewById(R.id.toggleDrawer).getWidth());
+
 
                 ConstraintLayout container = findViewById(R.id.nvLeft);
 
                 ConstraintSet set = new ConstraintSet();
                 set.clone(container);
 
-                set.setGuidelineEnd(R.id.endingBoundary, screenWidth + 100 - (int) (
-                                (ViewCompat.getLayoutDirection(KenarMenu.this) == ViewCompat.LAYOUT_DIRECTION_RTL?1:-1)
-                        * position + findViewById(R.id.toggleDrawer).getWidth()));
+                int end = 0;
+                //end = end + findViewById(R.id.toggleDrawer).getWidth();
+                end = (int) (end + position);
+
+                if (ViewCompat.getLayoutDirection(KenarMenu.this) == ViewCompat.LAYOUT_DIRECTION_RTL) {
+                    end -= 100;
+                    end *= -1;
+
+                }else{
+                    end = end + screenWidth;
+                }
+
+                Log.e(TAG,position +"="+ end);
+
+                set.setGuidelineEnd(R.id.endingBoundary,  end);
 
 
                 set.applyTo(container);
