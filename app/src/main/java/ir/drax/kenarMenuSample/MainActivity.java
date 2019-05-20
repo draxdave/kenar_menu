@@ -51,7 +51,10 @@ public class MainActivity extends AppCompatActivity {
 
         kenarMenu
                 .setInnerRoomLayout(innerLayout)
-                .setListItemLayoutId(R.layout.kenar_menu_item).setPlusInteractions(new SliderPlusInteraction() {
+                .setTitle(R.string.my_drawer_title)
+                .setTitle(R.string.my_drawer_filter)
+                .setListItemLayoutId(R.layout.kenar_menu_item)
+                .setPlusInteractions(new SliderPlusInteraction() {
             @Override
             public void onRequestListByPage(int pageNo) {
                 /*
@@ -95,6 +98,14 @@ public class MainActivity extends AppCompatActivity {
                 icon.setImageResource(item.getIcon());
 
                 return listItemLayout;
+            }
+
+            @Override
+            public void onFilterChanged(boolean enabled) {
+                if (enabled)
+                    kenarMenu.fillListByPage(FakeGenerator.getFakeItems(4),1);
+                else
+                    kenarMenu.fillListByPage(FakeGenerator.getFakeItems(20),1);
             }
         });
     }

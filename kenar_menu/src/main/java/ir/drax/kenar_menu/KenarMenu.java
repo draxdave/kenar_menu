@@ -170,11 +170,11 @@ public class KenarMenu<T> extends FrameLayout implements SwipeRefreshLayout.OnRe
 
 
     private void initFilter() {
-        filter_switch = findViewById(R.id.just_mine_switch);
+        filter_switch = findViewById(R.id.filter_switch);
         filter_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                onRefresh();
+                plusInteractions.onFilterChanged(b);
             }
         });
     }
@@ -216,7 +216,7 @@ public class KenarMenu<T> extends FrameLayout implements SwipeRefreshLayout.OnRe
         refreshButton = findViewById(R.id.refreshBtn);
         refreshButton.setClickListener(new ClickListener() {
             @Override
-            public void clicked() {
+            public void clicked(NormalButton button) {
                 onRefresh();
             }
         });
@@ -273,7 +273,7 @@ public class KenarMenu<T> extends FrameLayout implements SwipeRefreshLayout.OnRe
     @Override
     public void onRefresh() {
         if (plusInteractions!=null) {
-            refreshButton.disable();
+            refreshButton.busy();
             refreshLayout.setRefreshing(true);
             listView.setAlpha(LOADING_ALPHA);
             if (listAdapter != null)listAdapter.disableInteractions();
@@ -285,7 +285,7 @@ public class KenarMenu<T> extends FrameLayout implements SwipeRefreshLayout.OnRe
     private void refreshListDone(){
         if (listAdapter != null)listAdapter.enableInteractions();
         listView.setAlpha(1f);
-        refreshButton.enable();
+        refreshButton.ready();
         refreshLayout.setRefreshing(false);
     }
 
@@ -468,6 +468,31 @@ public class KenarMenu<T> extends FrameLayout implements SwipeRefreshLayout.OnRe
         return this;
     }
 
+    public KenarMenu setTitle(int title) {
+        return setTitle(getResources().getString(title));
+    }
+
+    public KenarMenu setTitle(String title) {
+
+        ((TextView)findViewById(R.id.title)).setText(title);
+        return this;
+    }
+
+    public KenarMenu setTitleTextColor(int color) {
+        ((TextView)findViewById(R.id.title)).setTextColor(color);
+        return this;
+    }
+
+    public KenarMenu setFilterTitle(int title) {
+        return setFilterTitle(getResources().getString(title));
+    }
+
+    public KenarMenu setFilterTitle(String title) {
+        filter_switch.setText(title);
+        return this;
+    }
+
+
     public void open() {
         openDrawer();
     }
@@ -507,5 +532,6 @@ public class KenarMenu<T> extends FrameLayout implements SwipeRefreshLayout.OnRe
 
         roomDataLoaded=true;
     }
+
 
 }
