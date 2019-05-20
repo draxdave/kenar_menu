@@ -29,6 +29,7 @@ import java.util.List;
 
 import ir.drax.kenar_menu.interfaces.Drag;
 import ir.drax.kenar_menu.interfaces.SliderPlusInteraction;
+import ir.drax.kenar_menu.interfaces.Swipe;
 import ir.drax.loadingbutton.ClickListener;
 import ir.drax.loadingbutton.NormalButton;
 
@@ -257,14 +258,22 @@ public class KenarMenu<T> extends FrameLayout implements SwipeRefreshLayout.OnRe
             }
 
             @Override
-            public void onItemLayoutLoaded(Object reserveItem, int pos) {
+            public void onItemLayoutLoaded(Object sampleItem, int pos) {
                 if (plusInteractions!=null) {
-                    if (plusInteractions.onListItemClicked(reserveItem,pos)){
+                    if (plusInteractions.onListItemClicked(sampleItem,pos)){
                         moveToEndDrawer();
                         showRoomProgress(true);
                     }
                 }
             }
+
+            /*@Override
+            public boolean onListItemSwiped(Object sampleItem, int position) {
+                if (plusInteractions!=null) {
+                    return plusInteractions.onListItemSwiped(sampleItem,position);
+                }
+                return false;
+            }*/
         });
         listView.setAdapter(listAdapter);
     }
@@ -489,6 +498,11 @@ public class KenarMenu<T> extends FrameLayout implements SwipeRefreshLayout.OnRe
 
     public KenarMenu setFilterTitle(String title) {
         filter_switch.setText(title);
+        return this;
+    }
+
+    public KenarMenu setSwipe(Swipe swipe) {
+        listAdapter.setSwipe(swipe);
         return this;
     }
 

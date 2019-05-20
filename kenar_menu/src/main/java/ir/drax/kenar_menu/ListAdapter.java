@@ -10,11 +10,13 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 
 import ir.drax.kenar_menu.interfaces.RecyclerInteraction;
+import ir.drax.kenar_menu.interfaces.Swipe;
 
 public class ListAdapter extends RecyclerView.Adapter<ListAdapter.MyViewHolder> {
     private ArrayList<Object> items = new ArrayList<>();
     private ArrayList<Object> hiddenItems=new ArrayList<>();
     private RecyclerStates recyclerStates;
+    private Swipe swipe;
     private boolean interactionsEnabled = true;
     private int listItemLayout;
 
@@ -37,15 +39,18 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.MyViewHolder> 
                     recyclerStates.onItemLayoutLoaded(items.get(getAdapterPosition()) , getAdapterPosition());
                 }
             });
+            revealLayout.dragLock(swipe==null);
             revealLayout.setInteraction(new RecyclerInteraction() {
                 @Override
                 public void onSwipe(int id) {
-                    if (!interactionsEnabled){
+                    if (!interactionsEnabled ||
+                            !swipe.onListItemSwiped(items.get(getAdapterPosition()),getAdapterPosition())){
                         revealLayout.close(true);
                         return;
                     }
 
                     hiddenItems.add(items.get(getAdapterPosition()));
+
                     items.remove(getAdapterPosition());
                     notifyItemRemoved(getAdapterPosition());
 
@@ -55,8 +60,8 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.MyViewHolder> 
         }
     }
 
-    ListAdapter(ArrayList<Object> reserveItems, int listItem, RecyclerStates recyclerStates) {
-        items = reserveItems;
+    ListAdapter(ArrayList<Object> sampleItems, int listItem, RecyclerStates recyclerStates) {
+        items = sampleItems;
         this.recyclerStates = recyclerStates;
         this.listItemLayout =listItem;
 
@@ -117,12 +122,15 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.MyViewHolder> 
     public interface RecyclerStates {
         void onListEmpty();
         void onListNotEmpty();
-        View onItemLayoutLoaded(Object item, int position, int listItemLayou);
-        void onItemLayoutLoaded(Object reserveItem, int position);
+        View onItemLayoutLoaded(Object item, int position, int listItemLayout);
+        void onItemLayoutLoaded(Object sampleItem, int position);
     }
 
     public int getListItemLayoutId() {
         return listItemLayout;
     }
 
+    public void setSwipe(Swipe swipe) {
+        this.swipe = swipe;
+    }
 }

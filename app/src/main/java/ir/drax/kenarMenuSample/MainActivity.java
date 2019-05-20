@@ -17,6 +17,7 @@ import java.util.Locale;
 
 import ir.drax.kenar_menu.KenarMenu;
 import ir.drax.kenar_menu.interfaces.SliderPlusInteraction;
+import ir.drax.kenar_menu.interfaces.Swipe;
 
 public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
@@ -52,60 +53,67 @@ public class MainActivity extends AppCompatActivity {
         kenarMenu
                 .setInnerRoomLayout(innerLayout)
                 .setTitle(R.string.my_drawer_title)
-                .setTitle(R.string.my_drawer_filter)
+                .setFilterTitle(R.string.my_drawer_filter)
+                .setTitleTextColor(R.color.white)
                 .setListItemLayoutId(R.layout.kenar_menu_item)
                 .setPlusInteractions(new SliderPlusInteraction() {
-            @Override
-            public void onRequestListByPage(int pageNo) {
-                /*
-                 * A Fake RestApi call to get list items
-                 * */
-
-                new Handler().postDelayed(new Runnable() {
                     @Override
-                    public void run() {
-                        kenarMenu.fillListByPage(FakeGenerator.getFakeItems(20),1);
+                    public void onRequestListByPage(int pageNo) {
+                        /*
+                         * A Fake RestApi call to get list items
+                         * */
+
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                kenarMenu.fillListByPage(FakeGenerator.getFakeItems(20),1);
+                            }
+                        },500);
                     }
-                },500);
-            }
 
+                    @Override
+                    public boolean onListItemClicked( Object obj, final int position) {
+                        final SampleObject item = (SampleObject) obj;
+                        switch (position){
+                            case 0:
+                                return false;// This item will not go to DETAILS page
+
+                            case 1:
+                                Toast.makeText(MainActivity.this, item.getTitle() + " Clicked!", Toast.LENGTH_SHORT).show();
+                                return false;// This item will not go to DETAILS page too
+
+                        }
+
+                        setInnerLayoutData(item);
+                        kenarMenu.roomDataLoaded();
+
+                        return true;
+                    }
+
+                    @Override
+                    public View listItemLayout(Object obj, int position, View listItemLayout) {
+                        final SampleObject item = (SampleObject) obj;
+
+                        TextView title =listItemLayout.findViewById(R.id.title);
+                        ImageView icon =listItemLayout.findViewById(R.id.icon);
+                        title.setText(item.getTitle());
+                        icon.setImageResource(item.getIcon());
+
+                        return listItemLayout;
+                    }
+
+                    @Override
+                    public void onFilterChanged(boolean enabled) {
+                        if (enabled)
+                            kenarMenu.fillListByPage(FakeGenerator.getFakeItems(4),1);
+                        else
+                            kenarMenu.fillListByPage(FakeGenerator.getFakeItems(20),1);
+                    }
+                })
+        .setSwipe(new Swipe() {
             @Override
-            public boolean onListItemClicked( Object obj, final int position) {
-                final SampleObject item = (SampleObject) obj;
-                switch (position){
-                    case 0:
-                        return false;// This item will not go to DETAILS page
-
-                    case 1:
-                        Toast.makeText(MainActivity.this, item.getTitle() + " Clicked!", Toast.LENGTH_SHORT).show();
-                        return false;// This item will not go to DETAILS page too
-
-                }
-
-                setInnerLayoutData(item);
-                kenarMenu.roomDataLoaded();
-
+            public boolean onListItemSwiped(Object sampleItem, int position) {
                 return true;
-            }
-
-            @Override
-            public View listItemLayout(Object obj, int position, View listItemLayout) {
-                final SampleObject item = (SampleObject) obj;
-
-                TextView title =listItemLayout.findViewById(R.id.title);
-                ImageView icon =listItemLayout.findViewById(R.id.icon);
-                title.setText(item.getTitle());
-                icon.setImageResource(item.getIcon());
-
-                return listItemLayout;
-            }
-
-            @Override
-            public void onFilterChanged(boolean enabled) {
-                if (enabled)
-                    kenarMenu.fillListByPage(FakeGenerator.getFakeItems(4),1);
-                else
-                    kenarMenu.fillListByPage(FakeGenerator.getFakeItems(20),1);
             }
         });
     }
