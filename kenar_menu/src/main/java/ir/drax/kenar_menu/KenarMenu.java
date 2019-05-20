@@ -487,8 +487,11 @@ public class KenarMenu<T> extends FrameLayout implements SwipeRefreshLayout.OnRe
         return this;
     }
 
-    public KenarMenu setTitleTextColor(int color) {
+    public KenarMenu setHeaderTextColor(int color) {
         ((TextView)findViewById(R.id.title)).setTextColor(color);
+        refreshButton.setIconTint(color);
+        refreshButton.setTitleColor(color);
+        filter_switch.setTextColor(color);
         return this;
     }
 

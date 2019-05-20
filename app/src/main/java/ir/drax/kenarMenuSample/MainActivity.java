@@ -1,7 +1,6 @@
 package ir.drax.kenarMenuSample;
 
 import android.content.Context;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.widget.DrawerLayout;
@@ -12,8 +11,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import java.util.Locale;
 
 import ir.drax.kenar_menu.KenarMenu;
 import ir.drax.kenar_menu.interfaces.SliderPlusInteraction;
@@ -54,7 +51,6 @@ public class MainActivity extends AppCompatActivity {
                 .setInnerRoomLayout(innerLayout)
                 .setTitle(R.string.my_drawer_title)
                 .setFilterTitle(R.string.my_drawer_filter)
-                .setTitleTextColor(R.color.white)
                 .setListItemLayoutId(R.layout.kenar_menu_item)
                 .setPlusInteractions(new SliderPlusInteraction() {
                     @Override
@@ -110,12 +106,13 @@ public class MainActivity extends AppCompatActivity {
                             kenarMenu.fillListByPage(FakeGenerator.getFakeItems(20),1);
                     }
                 })
-        .setSwipe(new Swipe() {
-            @Override
-            public boolean onListItemSwiped(Object sampleItem, int position) {
-                return true;
-            }
-        });
+                .setSwipe(new Swipe() {
+                    @Override
+                    public boolean onListItemSwiped(Object sampleItem, int position) {
+                        return true;
+                    }
+                })
+                .setHeaderTextColor(getResources().getColor(R.color.white));
     }
 
     private void setInnerLayoutData(SampleObject item){
