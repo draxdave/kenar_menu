@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
                         return true;
                     }
                 })
-                .setHeaderTextColor(getResources().getColor(R.color.white));
+                .setHeaderTextColor(R.color.white);
     }
 
     private void setInnerLayoutData(SampleObject item){

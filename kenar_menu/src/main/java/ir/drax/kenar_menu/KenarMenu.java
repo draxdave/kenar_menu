@@ -2,6 +2,7 @@ package ir.drax.kenar_menu;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Typeface;
 import android.support.constraint.ConstraintLayout;
 import android.support.constraint.ConstraintSet;
 import android.support.design.widget.Snackbar;
@@ -488,10 +489,21 @@ public class KenarMenu<T> extends FrameLayout implements SwipeRefreshLayout.OnRe
     }
 
     public KenarMenu setHeaderTextColor(int color) {
+        color = getResources().getColor(color);
         ((TextView)findViewById(R.id.title)).setTextColor(color);
         refreshButton.setIconTint(color);
         refreshButton.setTitleColor(color);
         filter_switch.setTextColor(color);
+        return this;
+    }
+
+    public KenarMenu setFontTypeface(Typeface typeface) {
+        ((TextView)findViewById(R.id.title)).setTypeface(typeface);
+        refreshButton.setFontTypeface(typeface);
+        filter_switch.setSwitchTypeface(typeface);
+
+        //set font for adapter too ...
+
         return this;
     }
 
