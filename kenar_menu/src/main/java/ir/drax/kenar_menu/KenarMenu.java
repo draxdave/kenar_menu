@@ -333,6 +333,7 @@ public class KenarMenu<T> extends FrameLayout implements SwipeRefreshLayout.OnRe
 
         findViewById(R.id.faded_back_btn).setAlpha(1- drawerDoorSize);
 
+        if (listAdapter==null)buildAdapter();
         if (listAdapter.getItemCount()==0)onRefresh();
 
         dragHelper.setListener(this,this);
